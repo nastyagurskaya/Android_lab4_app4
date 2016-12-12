@@ -77,57 +77,9 @@ public class Add extends Activity {
         }
 
         @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
-            if (oldVersion == 1 && newVersion == 2) {
-
-                Cursor c = db.query("mytable", null, null, null, null, null, null);
-
-                ArrayList<String> idArray = new ArrayList<String>();
-                ArrayList<String> nameArray = new ArrayList<String>();
-                ArrayList<String> name1Array = new ArrayList<String>();
-                ArrayList<String> name2Array = new ArrayList<String>();
-                ArrayList<String> dataArray = new ArrayList<String>();
-
-                if (c.moveToFirst()) {
-                    int idColIndex = c.getColumnIndex("id");
-                    int nameColIndex = c.getColumnIndex("name");
-                    int name1ColIndex = c.getColumnIndex("surname");
-                    int name2ColIndex = c.getColumnIndex("patronymic");
-                    int dataColIndex = c.getColumnIndex("data");
-                    do {
-                        idArray.add(c.getString(idColIndex));
-                        nameArray.add(c.getString(nameColIndex));
-                        name1Array.add(c.getString(name1ColIndex));
-                        name2Array.add(c.getString(name2ColIndex));
-                        dataArray.add(c.getString(dataColIndex));
-                    } while (c.moveToNext());
-
-                }
-
-                db.beginTransaction();
-                try {
-                    db.execSQL("DROP TABLE mytable;");
-                    // создаем таблицу должностей
-                    db.execSQL("create table mytable ("
-                            + "id integer primary key,"
-                            + "fio text, data text);");
-
-                    ContentValues cv = new ContentValues();
-                    // заполняем ее
-                    for (int i = 0; i < idArray.size(); i++) {
-                        cv.clear();
-                        cv.put("id", idArray.get(i));
-                        cv.put("fio", nameArray.get(i) + name1Array.get(i) + name2Array.get(i));
-                        cv.put("data", dataArray.get(i));
-                        long rowID = db.insert("mytable", null, cv);
-                    }
-
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
-            }
         }
+
     }
 }
